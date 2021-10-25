@@ -14,7 +14,7 @@
     <div class="header">
       <div class="header__left">
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png"
+          src="{{logo_img}}"
           alt=""
         />
         <div class="header__input">
@@ -45,7 +45,7 @@
         <div class="header__info">
           <img
             class="user__avatar"
-            src={{vars['user_imgsource']}}
+            src={{vars['avatar_img']}}
             alt=""
           />
           <h4>{{vars['user_fullname']}}</h4>
@@ -65,10 +65,10 @@
         <div class="sidebarRow">
           <img
             class="user__avatar"
-            src={{vars['user_imgsource']}}
+            src={{vars['avatar_img']}}
             alt=""
           />
-          <h4>24679 Student</h4>
+          <h4>{{vars['user_fullname']}}</h4>
         </div>
 
         <div class="sidebarRow">
@@ -111,101 +111,21 @@
       <!-- feed starts -->
       <div class="feed">
         <div class="storyReel">
-          <!-- story starts -->
+          {% for story in vars['stories'] %}
+          <!-- story starts -->          
           <div
-            style="
-              background-image: url('https://images.unsplash.com/photo-1527082395-e939b847da0d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80');
-            "
+            style="background-image: url('{{story['bg_img']}}');"
             class="story"
           >
             <img
               class="user__avatar story__avatar"
-              src="https://www.shareicon.net/data/2016/05/24/770139_man_512x512.png"
+              src="{{story['avatar_img']}}"
               alt=""
             />
-            <h4>Story 1</h4>
+            <h4>{{story['message']}}</h4>
           </div>
           <!-- story ends -->
-
-          <!-- story starts -->
-          <div
-            style="
-              background-image: url('https://cellularnews.com/wp-content/uploads/2020/04/Delete-photo-337x600.jpg');
-            "
-            class="story"
-          >
-            <img
-              class="user__avatar story__avatar"
-              src={{vars['user_imgsource']}}
-              alt=""
-            />
-            <h4>Story 2</h4>
-          </div>
-          <!-- story ends -->
-
-          <!-- story starts -->
-          <div
-            style="
-              background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTBHC2s4NFdzXEsVzvBPGjkrSePQa-8XFuNtQ&usqp=CAU');
-            "
-            class="story"
-          >
-            <img
-              class="user__avatar story__avatar"
-              src={{vars['user_imgsource']}}
-              alt=""
-            />
-            <h4>Story 3</h4>
-          </div>
-          <!-- story ends -->
-
-          <!-- story starts -->
-          <div
-            style="
-              background-image: url('https://images.unsplash.com/photo-1527082395-e939b847da0d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80');
-            "
-            class="story"
-          >
-            <img
-              class="user__avatar story__avatar"
-              src={{vars['user_imgsource']}}
-              alt=""
-            />
-            <h4>Story 4</h4>
-          </div>
-          <!-- story ends -->
-
-          <!-- story starts -->
-          <div
-            style="
-              background-image: url('https://cellularnews.com/wp-content/uploads/2020/04/Delete-photo-337x600.jpg');
-            "
-            class="story"
-          >
-            <img
-              class="user__avatar story__avatar"
-              src="https://image.freepik.com/free-vector/businessman-avatar-cartoon-character-profile_18591-50584.jpg"
-              alt=""
-            />
-            <h4>Story 5</h4>
-          </div>
-          <!-- story ends -->
-
-          <!-- story starts -->
-          <div
-            style="
-              background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTBHC2s4NFdzXEsVzvBPGjkrSePQa-8XFuNtQ&usqp=CAU');
-            "
-            class="story"
-          >
-            <img
-              class="user__avatar story__avatar"
-              src={{vars['user_imgsource']}}
-              alt=""
-            />
-            <h4>Story 6</h4>
-          </div>
-          <!-- story ends -->
+          {% endfor %}          
         </div>
 
         <!-- message sender starts -->
@@ -213,7 +133,7 @@
           <div class="messageSender__top">
             <img
               class="user__avatar"
-              src={{vars['user_imgsource']}}
+              src={{vars['avatar_img']}}
               alt=""
             />
             <form>
@@ -240,30 +160,32 @@
         </div>
         <!-- message sender ends -->
 
+        {% for post in vars['posts'] %}
         <!-- post starts -->
         <div class="post">
           <div class="post__top">
             <img
               class="user__avatar post__avatar"
-              src={{vars['user_imgsource']}}
+              src={{post['avatar_img']}}
               alt=""
             />
             <div class="post__topInfo">
-              <h3>Student 24679</h3>
-              <p>22 October 2021 at 20:30</p>
+              <h3>{{post['user_fullname']}}</h3>
+              <p>{{post['timestamp']}}</p>
             </div>
           </div>
 
           <div class="post__bottom">
-            <p>Some content of the post. Image below is a cool looking car that the template comes with, but now I also want a car like that.</p>
+            <p>{{post['message']}}</p>
           </div>
-
+          {% if post['has_img'] %}
           <div class="post__image">
             <img
-              src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2Fyc3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
+              src="{{post['post_img']}}"
               alt=""
             />
           </div>
+          {% endif %}
 
           <div class="post__options">
             <div class="post__option">
@@ -282,57 +204,39 @@
             </div>
           </div>
 
-          <!-- comments begin-->
+          {% if post['has_comments'] %}
+          <!-- comments begin-->                  
           <div class="post__comments">
 
+            {% for comment in post['comments'] %}
+            <!---a comment begins -->
             <div class="comment">            
               <div class="comment__top">
                 <img
                   class="user__avatar post__avatar"
-                  src={{vars['user_imgsource']}}
+                  src={{comment['avatar_img']}}
                   alt=""
                 />
               
                 <div class="comment__main">
-                  <h3>Student 24679</h3>     
-                  <p>This is a comment for the post without image.</p>           
+                  <h3>{{comment['user_fullname']}}</h3>     
+                  <p>{{comment['message']}}</p>           
                 </div>      
               </div>
 
               <div class="comment__options">
-                <p>Like   &#183; Comment &#183; 14h</p>
+                <p>Like   &#183; Comment &#183; {{comment['time_ago']}}</p>
               </div>                
 
             </div>
             <!---a comment ends -->
+            {% endfor %}
 
             <div class="comment">            
               <div class="comment__top">
                 <img
                   class="user__avatar post__avatar"
-                  src={{vars['user_imgsource']}}
-                  alt=""
-                />
-              
-                <div class="comment__main">
-                  <h3>Student 24679</h3>     
-                  <p>This is a comment for the post without image.</p>           
-                </div>      
-              </div>
-
-              <div class="comment__options">
-                <p>Like   &#183; Comment &#183; 14h</p>
-              </div>  
-              
-            </div>
-            <!---a comment ends -->
-
-
-            <div class="comment">            
-              <div class="comment__top">
-                <img
-                  class="user__avatar post__avatar"
-                  src={{vars['user_imgsource']}}
+                  src="{{vars['avatar_img']}}"
                   alt=""
                 />
               
@@ -345,158 +249,14 @@
               
             </div>
             <!---a comment ends -->
-
           
           </div>
           <!---comments ends -->
+          {% endif %}
 
         </div>
         <!-- post ends -->
-
-
-
-        <!-- post starts -->
-        <div class="post">
-          <div class="post__top">
-            <img
-              class="user__avatar post__avatar"
-              src={{vars['user_imgsource']}}
-              alt=""
-            />
-            <div class="post__topInfo">
-              <h3>Student 24679</h3>
-              <p>20 October 2021 at 20:30</p>
-            </div>
-          </div>
-
-          <div class="post__bottom">
-            <p>This is a post without image.</p>
-          </div>
-
-          <div class="post__options">
-            <div class="post__option">
-              <span class="material-icons"> thumb_up </span>
-              <p>Like</p>
-            </div>
-
-            <div class="post__option">
-              <span class="material-icons"> chat_bubble_outline </span>
-              <p>Comment</p>
-            </div>
-
-            <div class="post__option">
-              <span class="material-icons"> near_me </span>
-              <p>Share</p>
-            </div>
-          </div>
-        </div>
-        <!-- post ends -->
-
-
-
-        <!-- post starts -->
-        <div class="post">
-          <div class="post__top">
-            <img
-              class="user__avatar post__avatar"
-              src={{vars['user_imgsource']}}
-              alt=""
-            />
-            <div class="post__topInfo">
-              <h3>Student 24679</h3>
-              <p>20 October 2021 at 20:30</p>
-            </div>
-          </div>
-
-          <div class="post__bottom">
-            <p>This is a post without image.</p>
-          </div>
-
-          <div class="post__options">
-            <div class="post__option">
-              <span class="material-icons"> thumb_up </span>
-              <p>Like</p>
-            </div>
-
-            <div class="post__option">
-              <span class="material-icons"> chat_bubble_outline </span>
-              <p>Comment</p>
-            </div>
-
-            <div class="post__option">
-              <span class="material-icons"> near_me </span>
-              <p>Share</p>
-            </div>
-          </div>
-
-          <!-- comments begin-->
-          <div class="post__comments">
-            <div class="comment">            
-              <div class="comment__top">
-                <img
-                  class="user__avatar post__avatar"
-                  src={{vars['user_imgsource']}}
-                  alt=""
-                />
-              
-                <div class="comment__main">
-                  <h3>Student 24679</h3>     
-                  <p>This is a comment for the post without image.</p>           
-                </div>      
-              </div>
-
-              <div class="comment__options">
-                <p>Like   &#183; Comment &#183; 14h</p>
-              </div>                
-
-            </div>
-            <!---a comment ends -->
-
-            <div class="comment">            
-              <div class="comment__top">
-                <img
-                  class="user__avatar post__avatar"
-                  src={{vars['user_imgsource']}}
-                  alt=""
-                />
-              
-                <div class="comment__main">
-                  <h3>Student 24679</h3>     
-                  <p>This is a comment for the post without image.</p>           
-                </div>      
-              </div>
-
-              <div class="comment__options">
-                <p>Like   &#183; Comment &#183; 14h</p>
-              </div>  
-              
-            </div>
-            <!---a comment ends -->
-
-            <div class="comment">            
-              <div class="comment__top">
-                <img
-                  class="user__avatar post__avatar"
-                  src={{vars['user_imgsource']}}
-                  alt=""
-                />
-              
-                <div class="comment__input">
-                  <form>
-                    <input class="messageSender__input" placeholder="What's on your mind?" type="text" />
-                  </form>        
-                </div>      
-              </div>              
-              
-            </div>
-            <!---a comment ends -->
-
-          
-          </div>
-          <!---comments ends -->
-        
-        </div>
-        <!-- post ends -->
+        {% endfor %}
 
       </div>
       <!-- feed ends -->
