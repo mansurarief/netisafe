@@ -8,13 +8,14 @@
     <title>{{vars['user_pagetitle']}}</title>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/post.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    
   </head>
   <body>
     <!-- header starts -->
     <div class="header">
       <div class="header__left">
         <img
-          src="{{logo_img}}"
+          src=""
           alt=""
         />
         <div class="header__input">
@@ -160,7 +161,7 @@
         </div>
         <!-- message sender ends -->
 
-        {% for post in vars['posts'] %}
+        {% for post, pred in zip(vars['posts'], preds) %}
         <!-- post starts -->
         <div class="post">
           <div class="post__top">
@@ -177,6 +178,10 @@
 
           <div class="post__bottom">
             <p>{{post['message']}}</p>
+
+            {% for key, value in pred.items()%}
+            <span class="badge">{{key}} : {{value}}</span>
+            {% endfor %}
           </div>
           {% if post['has_img'] %}
           <div class="post__image">

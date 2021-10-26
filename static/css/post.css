@@ -365,6 +365,24 @@ body {
 
 
 
+/* _badge.scss:6 */
+.badge {
+  display: inline-block;
+  line-height: 1;
+  padding: 5px 5px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  font-size: xx-small;
+  line-height: 1;
+  border-radius: 8px;
+  background-color: #dddddd;
+  margin: 2px;
+
+}
+
+
+
 @media (max-width: 768px) {
   .sidebar {
     display: none;
