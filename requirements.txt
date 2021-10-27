@@ -1,2 +1,7 @@
 flask
 detoxify
+scikit-learn
+lime
+pandas
+numpy
+eli5
