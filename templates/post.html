@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{vars['user_pagetitle']}}</title>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/post.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='js/posts.js') }}"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     
   </head>
@@ -129,37 +131,45 @@
           {% endfor %}          
         </div>
 
-        <!-- message sender starts -->
-        <div class="messageSender">
-          <div class="messageSender__top">
-            <img
-              class="user__avatar"
-              src={{vars['avatar_img']}}
-              alt=""
-            />
-            <form>
-              <input class="messageSender__input" placeholder="What's on your mind?" type="text" />
-            </form>
+
+        
+          <!-- message sender starts -->
+          <div class="messageSender">
+            <div class="messageSender__top">
+              <img
+                class="user__avatar"
+                src={{vars['avatar_img']}}
+                alt=""
+              />
+              
+                <input class="messageSender__input" placeholder="What's on your mind?" type="text" id="user_post_msg"/>
+                <button class='get_result'>Post</button>
+                
+              
+            </div>
+
+            <div class="messageSender__bottom">
+              <div class="messageSender__option">
+                <span style="color: red" class="material-icons"> videocam </span>
+                <h3>Live</h3>
+              </div>
+
+              <div class="messageSender__option">
+                <span style="color: green" class="material-icons"> photo_library </span>
+                <h3>Photo</h3>
+              </div>
+
+              <div class="messageSender__option">
+                <span style="color: orange" class="material-icons"> insert_emoticon </span>
+                <h3>Feeling</h3>
+              </div>
+            </div>
           </div>
+          <!-- message sender ends -->
 
-          <div class="messageSender__bottom">
-            <div class="messageSender__option">
-              <span style="color: red" class="material-icons"> videocam </span>
-              <h3>Live</h3>
-            </div>
+        <div class='new_posts'></div>        
 
-            <div class="messageSender__option">
-              <span style="color: green" class="material-icons"> photo_library </span>
-              <h3>Photo</h3>
-            </div>
 
-            <div class="messageSender__option">
-              <span style="color: orange" class="material-icons"> insert_emoticon </span>
-              <h3>Feeling</h3>
-            </div>
-          </div>
-        </div>
-        <!-- message sender ends -->
 
         {% for post, pred in zip(vars['posts'], preds) %}
         <!-- post starts -->
@@ -180,7 +190,11 @@
             <p>{{post['message']}}</p>
 
             {% for key, value in pred.items()%}
-            <span class="badge">{{key}} : {{value}}</span>
+            {% if value > 0.5 %}
+            <span class="badge-selected">{{key}} : {{value}}</span>
+            {% else %}
+            <span class="badge-common">{{key}} : {{value}}</span>    
+            {% endif %}        
             {% endfor %}
           </div>
           {% if post['has_img'] %}
@@ -271,4 +285,6 @@
 
     <div id="fb-root"></div>    
   </body>
+
+
 </html>

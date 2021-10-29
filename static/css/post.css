@@ -325,6 +325,10 @@ body {
   font-size: medium;
 }
 
+.new_posts{
+  width:  100%;
+}
+
 .comment {
   padding: 10px;
 }
@@ -366,7 +370,7 @@ body {
 
 
 /* _badge.scss:6 */
-.badge {
+.badge-common{
   display: inline-block;
   line-height: 1;
   padding: 5px 5px;
@@ -377,6 +381,21 @@ body {
   line-height: 1;
   border-radius: 8px;
   background-color: #dddddd;
+  margin: 2px;
+
+}
+
+.badge-selected{
+  display: inline-block;
+  line-height: 1;
+  padding: 5px 5px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  font-size: xx-small;
+  line-height: 1;
+  border-radius: 8px;
+  background-color: darkred;
   margin: 2px;
 
 }
