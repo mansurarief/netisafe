@@ -55,7 +55,16 @@ $(document).ready(function(){
         var badges_element = document.getElementById(badge_id);
 
         for(var key in response.pred){
-          badge_content = '<span class="badge-common" id="'+key+'-'+response.id+'">'+key+' : '+response.pred[key]+'</span>';
+          if (response.pred[key] > 0.7) {
+            var badge_class = "badge-selected";
+          } else if (response.pred[key] > 0.1) {
+            var badge_class = "badge-common";
+          } else {
+            var badge_class = "badge-new-default";
+          }
+          
+
+          badge_content = '<span class="'+badge_class+'" id="'+key+'-'+response.id+'">'+key+' : '+response.pred[key]+'</span>';
 
          badges_element.innerHTML = badges_element.innerHTML + badge_content;
         }

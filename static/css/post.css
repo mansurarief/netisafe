@@ -368,9 +368,14 @@ body {
 }
 
 
+.text_smaller{
+  font-size: xx-small;
+}
 
-/* _badge.scss:6 */
-.badge-common{
+
+/* collapse.scss:6 */
+.collapse{
+  cursor: pointer;
   display: inline-block;
   line-height: 1;
   padding: 5px 5px;
@@ -380,24 +385,83 @@ body {
   font-size: xx-small;
   line-height: 1;
   border-radius: 8px;
-  background-color: #dddddd;
+  background-color: #ffffff;
   margin: 2px;
+  opacity: 0.5;
+}
+.collapse + input{
+  display: none; /* hide the checkboxes */
+}
+.collapse + input + div{
+  display:none;
+}
+.collapse + input:checked + div{
+  display:block;
+}
+
+
+/* _badge.scss:6 */
+.badge-new-default {
+    display: none;
+    padding: 5px 5px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    font-size: xx-small;
+    line-height: 1;
+    border-radius: 8px;
+    background-color: #dddddd;
+    margin: 2px;
+    opacity: 0.5;
 
 }
 
-.badge-selected{
-  display: inline-block;
-  line-height: 1;
-  padding: 5px 5px;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  font-size: xx-small;
-  line-height: 1;
-  border-radius: 8px;
-  background-color: darkred;
-  margin: 2px;
+.badge-default {
+    display: inline-block;
+    line-height: 1;
+    padding: 5px 5px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    font-size: xx-small;
+    line-height: 1;
+    border-radius: 8px;
+    background-color: #dddddd;
+    margin: 2px;
+    opacity: 0.5;
 
+}
+
+.badge-common {
+    display: inline-block;
+    line-height: 1;
+    padding: 5px 5px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    font-size: xx-small;
+    line-height: 1;
+    border-radius: 8px;
+    background-color: #C7D7FB;
+    margin: 2px;
+    opacity: 1;
+}
+
+.badge-selected {
+    display: inline-block;
+    line-height: 1;
+    padding: 5px 5px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    font-size: xx-small;
+    line-height: 1;
+    border-radius: 8px;
+    background-color: #FF1E27;
+    text-decoration: underline;
+    margin: 2px;
+    color: #FFFFFF;
+    font-weight: bold;
 }
 
 

@@ -16,7 +16,9 @@ def post():
 
     preds = []
     for post in userdata['posts']:
-        preds.append(model.predict(post['message']))
+        result = model.predict(post['message'])
+        result = {str(key): value.round(3) for key, value in result.items()}
+        preds.append(result)
 
     return render_template('post.html', vars=userdata, logo_img=logo_img, preds=preds, zip=zip)
 

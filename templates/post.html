@@ -187,15 +187,31 @@
           </div>
 
           <div class="post__bottom">
+
             <p>{{post['message']}}</p>
 
-            {% for key, value in pred.items()%}
-            {% if value > 0.5 %}
-            <span class="badge-selected">{{key}} : {{value}}</span>
-            {% else %}
-            <span class="badge-common">{{key}} : {{value}}</span>    
-            {% endif %}        
-            {% endfor %}
+              {% for key, value in pred.items()%}
+              {% if value > 0.7 %}
+              <span class="badge-selected">{{key}} : {{value}}</span>
+
+              {% elif value > 0.1 %}
+              <span class="badge-common">{{key}} : {{value}}</span>
+
+                <label class="collapse" for="_{{post['id']}}">Other predictions ... </label>
+                <input id="_{{post['id']}}" type="checkbox">
+                <div>
+
+              {% else %}
+              
+              
+              
+                <span class="badge-default">{{key}} : {{value}}</span>
+              
+
+              {% endif %}
+              {% endfor %}
+              </div>
+            
           </div>
           {% if post['has_img'] %}
           <div class="post__image">
