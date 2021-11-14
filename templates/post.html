@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{vars['user_pagetitle']}}</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/post.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='js/posts.js') }}"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    
+  </head>
+  <body>
+    <!-- header starts -->
+    <div class="header">
+      <div class="header__left">
+        <img
+          src="{{logo_img}}"
+          alt=""
+        />
+        <div class="header__input">
+          <span class="material-icons"> search </span>
+          <input type="text" placeholder="Search" />
+        </div>
+      </div>
+
+      <div class="header__middle">
+        <div class="header__option active">
+          <span class="material-icons"> home </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> flag </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> subscriptions </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> storefront </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> supervised_user_circle </span>
+        </div>
+      </div>
+
+      <div class="header__right">
+        <div class="header__info">
+          <img
+            class="user__avatar"
+            src={{vars['avatar_img']}}
+            alt=""
+          />
+          <h4>{{vars['user_fullname']}}</h4>
+        </div>
+        <span class="material-icons"> add </span>
+        <span class="material-icons"> forum </span>
+        <span class="material-icons"> notifications_active </span>
+        <span class="material-icons"> expand_more </span>
+      </div>
+    </div>
+    <!-- header ends -->
+
+    <!-- main body starts -->
+    <div class="main__body">
+      <!-- sidebar starts -->
+      <div class="sidebar">
+        <div class="sidebarRow">
+          <img
+            class="user__avatar"
+            src={{vars['avatar_img']}}
+            alt=""
+          />
+          <h4>{{vars['user_fullname']}}</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> local_hospital </span>
+          <h4>Covid - 19 Information Center</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> emoji_flags </span>
+          <h4>Pages</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> people </span>
+          <h4>People</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> chat </span>
+          <h4>Messenger</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> storefront </span>
+          <h4>Marketplace</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> video_library </span>
+          <h4>Videos</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> expand_more </span>
+          <h4>More</h4>
+        </div>
+      </div>
+      <!-- sidebar ends -->
+
+      <!-- feed starts -->
+      <div class="feed">
+        <div class="storyReel">
+          {% for story in vars['stories'] %}
+          <!-- story starts -->          
+          <div
+            style="background-image: url('{{story['bg_img']}}');"
+            class="story"
+          >
+            <img
+              class="user__avatar story__avatar"
+              src="{{story['avatar_img']}}"
+              alt=""
+            />
+            <h4>{{story['message']}}</h4>
+          </div>
+          <!-- story ends -->
+          {% endfor %}          
+        </div>
+
+
+        
+          <!-- message sender starts -->
+          <div class="messageSender">
+            <div class="messageSender__top">
+              <img
+                class="user__avatar"
+                src={{vars['avatar_img']}}
+                alt=""
+              />
+              
+                <input class="messageSender__input" placeholder="What's on your mind?" type="text" id="user_post_msg"/>
+                <button class='get_result'>Post</button>
+                
+              
+            </div>
+
+            <div class="messageSender__bottom">
+              <div class="messageSender__option">
+                <span style="color: red" class="material-icons"> videocam </span>
+                <h3>Live</h3>
+              </div>
+
+              <div class="messageSender__option">
+                <span style="color: green" class="material-icons"> photo_library </span>
+                <h3>Photo</h3>
+              </div>
+
+              <div class="messageSender__option">
+                <span style="color: orange" class="material-icons"> insert_emoticon </span>
+                <h3>Feeling</h3>
+              </div>
+            </div>
+          </div>
+          <!-- message sender ends -->
+
+        <div class='new_posts'></div>        
+
+
+
+        {% for post, pred in zip(vars['posts'], preds) %}
+        <!-- post starts -->
+        <div class="post">
+          <div class="post__top">
+            <img
+              class="user__avatar post__avatar"
+              src={{post['avatar_img']}}
+              alt=""
+            />
+            <div class="post__topInfo">
+              <h3>{{post['user_fullname']}}</h3>
+              <p>{{post['timestamp']}}</p>
+            </div>
+          </div>
+
+          <div class="post__bottom">
+	    
+	    {% if pred.toxicity >0.7 or pred.severe_toxicity >0.7 or pred.obscene >0.7 or pred.threat >0.7 or pred.insult >0.7 or pred.identity_attack > 0.7%}
+            
+            <p hidden>{{post['message']}}</p>
+            <b><p style="font-style: italic;">Warning: Post deleted due to condescending remarks</p></b>
+                        
+            {%else%}
+            <p>{{post['message']}}</p>
+            
+            {%endif%}
+	    
+	    {% for key, value in pred.items()%}
+	    {% if value > 0.7 %}
+            <span class="badge-selected">{{key}} : {{value}}</span>
+
+            {% elif value > 0.1 %}
+            <span class="badge-common">{{key}} : {{value}}</span>
+            
+            {% else %}             
+            <span class="badge-default">{{key}} : {{value}}</span>
+            
+            {% endif %}  
+            {% endfor %}
+            
+ 
+          
+          </div>
+          {% if post['has_img'] %}
+          <div class="post__image">
+            <img
+              src="{{post['post_img']}}"
+              alt=""
+            />
+          </div>
+          {% endif %}
+
+          <div class="post__options">
+            <div class="post__option">
+              <span class="material-icons"> thumb_up </span>
+              <p>Like</p>
+            </div>
+
+            <div class="post__option">
+              <span class="material-icons"> chat_bubble_outline </span>
+              <p>Comment</p>
+            </div>
+
+            <div class="post__option">
+              <span class="material-icons"> near_me </span>
+              <p>Share</p>
+            </div>
+          </div>
+
+          {% if post['has_comments'] %}
+          <!-- comments begin-->                  
+          <div class="post__comments">
+
+            {% for comment in post['comments'] %}
+            <!---a comment begins -->
+            <div class="comment">            
+              <div class="comment__top">
+                <img
+                  class="user__avatar post__avatar"
+                  src={{comment['avatar_img']}}
+                  alt=""
+                />
+              
+                <div class="comment__main">
+                  <h3>{{comment['user_fullname']}}</h3>     
+                  <p>{{comment['message']}}</p>           
+                </div>      
+              </div>
+
+              <div class="comment__options">
+                <p>Like   &#183; Comment &#183; {{comment['time_ago']}}</p>
+              </div>                
+
+            </div>
+            <!---a comment ends -->
+            {% endfor %}
+
+            <div class="comment">            
+              <div class="comment__top">
+                <img
+                  class="user__avatar post__avatar"
+                  src="{{vars['avatar_img']}}"
+                  alt=""
+                />
+              
+                <div class="comment__input">
+                  <form>
+                    <input class="messageSender__input" placeholder="What's on your mind?" type="text" />
+                  </form>        
+                </div>      
+              </div>              
+              
+            </div>
+            <!---a comment ends -->
+          
+          </div>
+          <!---comments ends -->
+          {% endif %}
+
+        </div>
+        <!-- post ends -->
+        {% endfor %}
+
+      </div>
+      <!-- feed ends -->
+
+    </div>
+    <!-- main body ends -->
+
+    <div id="fb-root"></div>    
+  </body>
+
+
+</html>
