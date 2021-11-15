@@ -131,8 +131,6 @@
           {% endfor %}          
         </div>
 
-
-        
           <!-- message sender starts -->
           <div class="messageSender">
             <div class="messageSender__top">
@@ -140,12 +138,9 @@
                 class="user__avatar"
                 src={{vars['avatar_img']}}
                 alt=""
-              />
-              
+              />              
                 <input class="messageSender__input" placeholder="What's on your mind?" type="text" id="user_post_msg"/>
                 <button class='get_result'>Post</button>
-                
-              
             </div>
 
             <div class="messageSender__bottom">
@@ -169,9 +164,7 @@
 
         <div class='new_posts'></div>        
 
-
-
-        {% for post, pred in zip(vars['posts'], preds) %}
+        {% for post in vars['posts'] %}
         <!-- post starts -->
         <div class="post">
           <div class="post__top">
@@ -182,36 +175,34 @@
             />
             <div class="post__topInfo">
               <h3>{{post['user_fullname']}}</h3>
-              <p>{{post['timestamp']}}</p>
+              <p>{{post['date_text']}}</p>
             </div>
           </div>
 
           <div class="post__bottom">
 
             <p>{{post['message']}}</p>
-
-              {% for key, value in pred.items()%}
+              {% for k,(key, value) in enumerate(post['pred'].items())%}
+              {% if post['other_pred_pos'] == k %}
+                  {% if k > 0 %}                  
+                    <label class="collapse" for="post_{{post['id']}}">Other predictions ... </label>
+                    <input id="post_{{post['id']}}" type="checkbox">
+                    <div>
+                  {% else %}
+                      <label class="collapse" for="post_{{post['id']}}">Show predictions ... </label>
+                      <input id="post_{{post['id']}}" type="checkbox">
+                      <div>
+                  {% endif %}
+                {% endif%}
               {% if value > 0.7 %}
               <span class="badge-selected">{{key}} : {{value}}</span>
-
               {% elif value > 0.1 %}
               <span class="badge-common">{{key}} : {{value}}</span>
-
-                <label class="collapse" for="_{{post['id']}}">Other predictions ... </label>
-                <input id="_{{post['id']}}" type="checkbox">
-                <div>
-
               {% else %}
-              
-              
-              
-                <span class="badge-default">{{key}} : {{value}}</span>
-              
-
+              <span class="badge-default">{{key}} : {{value}}</span>              
               {% endif %}
-              {% endfor %}
-              </div>
-            
+              {% endfor %}                
+              </div>                  
           </div>
           {% if post['has_img'] %}
           <div class="post__image">
@@ -242,7 +233,6 @@
           {% if post['has_comments'] %}
           <!-- comments begin-->                  
           <div class="post__comments">
-
             {% for comment in post['comments'] %}
             <!---a comment begins -->
             <div class="comment">            
@@ -252,18 +242,37 @@
                   src={{comment['avatar_img']}}
                   alt=""
                 />
-              
                 <div class="comment__main">
                   <h3>{{comment['user_fullname']}}</h3>     
-                  <p>{{comment['message']}}</p>           
+                  <p>{{comment['message']}}</p>  
+                  {% for k, (key, value) in enumerate(comment['pred'].items()) %}
+                  {% if comment['other_pred_pos'] == k %}
+                    {% if k > 0 %}                    
+                      <label class="collapse" for="comment_{{comment['id']}}">Other predictions ... </label>
+                      <input id="comment_{{comment['id']}}" type="checkbox">
+                      <div>
+                    {% else %}
+                      <label class="collapse" for="comment_{{comment['id']}}">Show predictions ... </label>
+                      <input id="comment_{{comment['id']}}" type="checkbox">
+                      <div>
+                    {% endif %}
+                  {% endif%}
+                  {% if value > 0.7 %}
+                  <span class="badge-selected">{{key}} : {{value}}</span>
+                  {% elif value > 0.1 %}
+                  <span class="badge-common">{{key}} : {{value}}</span>                                      
+                  {% else %}
+                    <span class="badge-default">{{key}} : {{value}}</span>                  
+                  {% endif %}
+                  {% endfor %}                    
+                    </div>                  
                 </div>      
               </div>
+            </div>
 
               <div class="comment__options">
                 <p>Like   &#183; Comment &#183; {{comment['time_ago']}}</p>
-              </div>                
-
-            </div>
+              </div> 
             <!---a comment ends -->
             {% endfor %}
 
