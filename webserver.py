@@ -35,7 +35,7 @@ def post():
         
         if post['has_comments']:
             for j, comment in enumerate(post['comments']):
-                pred_post = get_prediction(post['message'], model)
+                pred_post = get_prediction(comment['message'], model)
                 userdata['posts'][i]['comments'][j]['pred'] = pred_post                
                 userdata['posts'][i]['comments'][j]['id'] = str(i)+"_"+str(j)
                 userdata['posts'][i]['comments'][j]['other_pred'] = other_prediction(pred_post)
