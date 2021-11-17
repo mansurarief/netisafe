@@ -4,13 +4,32 @@ from detoxify import Detoxify
 import datetime
 import time
 import numpy as np
+import re
+import torch
+from lime.lime_text import LimeTextExplainer
+import torch.nn.functional as F
 
 app = Flask(__name__)
 model = Detoxify('original', device='cpu')
 
+#explainer
+toxic_model = model.model
+toxic_tokenizer= model.tokenizer
+toxic_model.eval()
+class_names= model.class_names
+
+def predictor(texts):
+    inputs = toxic_tokenizer(texts, return_tensors="pt", truncation=True, padding=True).to("cpu")
+    out = toxic_model(**inputs)[0]
+    scores = torch.sigmoid(out).cpu().detach().numpy()
+    return scores
+
+explainer = LimeTextExplainer(class_names=class_names)    
+
+
 logo_img = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png' #'https://i.pravatar.cc/100'
 
-thres = {"moderate": 0.1, "high": 0.7}
+thres = {"exp":0.0001, "moderate": 0.1, "high": 0.7}
 
 @app.route('/')
 
@@ -27,6 +46,7 @@ def post():
 
         #add into original data
         userdata['posts'][i]['pred'] = pred_post
+        userdata['posts'][i]['pred_expl'] = get_explanation(post['message'])
 
         #add "other predictions" button
         userdata['posts'][i]['other_pred'] = other_prediction(pred_post)
@@ -36,7 +56,8 @@ def post():
         if post['has_comments']:
             for j, comment in enumerate(post['comments']):
                 pred_post = get_prediction(comment['message'], model)
-                userdata['posts'][i]['comments'][j]['pred'] = pred_post                
+                userdata['posts'][i]['comments'][j]['pred'] = pred_post   
+                userdata['posts'][i]['comments'][j]['pred_expl'] = get_explanation(comment['message'])             
                 userdata['posts'][i]['comments'][j]['id'] = str(i)+"_"+str(j)
                 userdata['posts'][i]['comments'][j]['other_pred'] = other_prediction(pred_post)
                 userdata['posts'][i]['comments'][j]['other_pred_pos'] = other_prediction_button_position(pred_post)
@@ -123,5 +144,18 @@ def get_prediction(message, model):
     pred_post = dict(sorted(pred_post.items(), key=lambda item: item[1], reverse=True))
 
     return pred_post
+
+
+def get_explanation(message):
+    exp = explainer.explain_instance(message, predictor, num_features=10, num_samples=20)
+    score_dict = dict(exp.as_list())
+    final_out = []
+    for word in re.split("\s|(?<!\d)['](?!\d)", message):
+        clean_word = re.sub(r'[^\w\s]','',word)
+        if clean_word  in score_dict.keys():
+            final_out.append( (clean_word, np.round(score_dict[clean_word], 4)))
+        elif clean_word != '':   
+            final_out.append( (clean_word, 0))        
+    return final_out    
 
 app.run(host='localhost', port=5000, debug=True)

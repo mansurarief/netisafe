@@ -187,13 +187,33 @@
               <label class="collapse" for="filter_{{post['id']}}">Show post ... </label>
               <input id="filter_{{post['id']}}" type="checkbox">
               <div class="post__filtered">
-                <p>{{post['message']}}</p>
+
+              <div class="post__explanation">
+              {% for k,(word, score) in enumerate(post['pred_expl'])%}
+                {% if score > thres['exp']%}
+                <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                {% else %}
+                <div class="expl_word">{{word}}</div>
+                {% endif %}
+              {%endfor%}
+              </div>
+
               </div>
               <p></p>
                           
               {%else%}
-              <p>{{post['message']}}</p>
               
+              <div class="post__explanation">
+              {% for k,(word, score) in enumerate(post['pred_expl'])%}
+                {% if score > thres['exp']%}
+                <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                {% else %}
+                <div class="expl_word">{{word}}</div>
+                {% endif %}
+              {%endfor%}
+              </div>
+              <p></p>
+
               {%endif%}
 
               {% for k,(key, value) in enumerate(post['pred'].items())%}
@@ -257,8 +277,38 @@
                   alt=""
                 />
                 <div class="comment__main">
-                  <h3>{{comment['user_fullname']}}</h3>     
-                  <p>{{comment['message']}}</p>  
+                  <h3>{{comment['user_fullname']}}</h3>  
+
+                  {% if comment['pred'].toxicity > thres['high'] or comment['pred'].severe_toxicity > thres['high'] or comment['pred'].obscene > thres['high'] or comment['pred'].threat >thres['high'] or comment['pred'].insult >thres['high'] or comment['pred'].identity_hate > thres['high']%} 
+
+                  <span class="post__warning">Warning: comment hidden due to condescending remarks</span>
+                  <label class="collapse" for="filter_comment_{{comment['id']}}">Show post ... </label>
+                  <input id="filter_comment_{{comment['id']}}" type="checkbox">
+                  <div class="post__filtered">                  
+
+                  <div class="post__explanation">
+                  {% for k,(word, score) in enumerate(comment['pred_expl'])%}
+                    {% if score > thres['exp'] %}
+                    <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                    {% else %}
+                    <div class="expl_word">{{word}}</div>
+                    {% endif %}
+                  {%endfor%}
+                  </div> 
+                  </div> 
+                  <p></p>
+                  {% else %}
+                  <div class="post__explanation">
+                  {% for k,(word, score) in enumerate(comment['pred_expl'])%}
+                    {% if score > thres['exp'] %}
+                    <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                    {% else %}
+                    <div class="expl_word">{{word}}</div>
+                    {% endif %}
+                  {%endfor%}
+                  </div> 
+                  {% endif %}
+
                   {% for k, (key, value) in enumerate(comment['pred'].items()) %}
                   {% if comment['other_pred_pos'] == k %}
                     {% if k > 0 %}                    
