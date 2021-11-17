@@ -272,6 +272,17 @@ body {
   padding: 15px 15px 0px 15px;
 }
 
+.post__warning {
+  font-style: italic;
+}
+
+.post__filtered{    
+    background-color: lightgray;
+    padding: 5px 5px 5px 5px;
+    margin: 8px 0 8px 0;
+    border-radius: 5px;
+}
+
 .post__avatar {
   margin-right: 10px;
 }

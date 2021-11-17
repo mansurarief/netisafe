@@ -10,6 +10,8 @@ model = Detoxify('original', device='cpu')
 
 logo_img = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png' #'https://i.pravatar.cc/100'
 
+thres = {"moderate": 0.1, "high": 0.7}
+
 @app.route('/')
 
 
@@ -18,9 +20,7 @@ def post():
         userdata = json.load(file_handler)
 
     userdata['posts'] = sorted(userdata['posts'], key=lambda d: d['timestamp'], reverse=True) 
-
     
-
     #add toxicity prediction to userdata
     for i, post in enumerate(userdata['posts']):
         pred_post = get_prediction(post['message'], model)
@@ -41,7 +41,7 @@ def post():
                 userdata['posts'][i]['comments'][j]['other_pred'] = other_prediction(pred_post)
                 userdata['posts'][i]['comments'][j]['other_pred_pos'] = other_prediction_button_position(pred_post)
 
-    return render_template('post.html', vars=userdata, logo_img=logo_img, enumerate=enumerate)
+    return render_template('post.html', vars=userdata, thres=thres, logo_img=logo_img, enumerate=enumerate)
 
 @app.route('/form')
 def form():

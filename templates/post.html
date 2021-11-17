@@ -181,7 +181,21 @@
 
           <div class="post__bottom">
 
-            <p>{{post['message']}}</p>
+              {% if post['pred'].toxicity > thres['high'] or post['pred'].severe_toxicity > thres['high'] or post['pred'].obscene > thres['high'] or post['pred'].threat >thres['high'] or post['pred'].insult >thres['high'] or post['pred'].identity_hate > thres['high']%}              
+                            
+              <span class="post__warning">Warning: Post hidden due to condescending remarks</span>
+              <label class="collapse" for="filter_{{post['id']}}">Show post ... </label>
+              <input id="filter_{{post['id']}}" type="checkbox">
+              <div class="post__filtered">
+                <p>{{post['message']}}</p>
+              </div>
+              <p></p>
+                          
+              {%else%}
+              <p>{{post['message']}}</p>
+              
+              {%endif%}
+
               {% for k,(key, value) in enumerate(post['pred'].items())%}
               {% if post['other_pred_pos'] == k %}
                   {% if k > 0 %}                  
@@ -194,9 +208,9 @@
                       <div>
                   {% endif %}
                 {% endif%}
-              {% if value > 0.7 %}
+              {% if value > thres['high'] %}
               <span class="badge-selected">{{key}} : {{value}}</span>
-              {% elif value > 0.1 %}
+              {% elif value > thres['moderate'] %}
               <span class="badge-common">{{key}} : {{value}}</span>
               {% else %}
               <span class="badge-default">{{key}} : {{value}}</span>              
@@ -257,9 +271,9 @@
                       <div>
                     {% endif %}
                   {% endif%}
-                  {% if value > 0.7 %}
+                  {% if value > thres['high'] %}
                   <span class="badge-selected">{{key}} : {{value}}</span>
-                  {% elif value > 0.1 %}
+                  {% elif value > thres['moderate'] %}
                   <span class="badge-common">{{key}} : {{value}}</span>                                      
                   {% else %}
                     <span class="badge-default">{{key}} : {{value}}</span>                  
