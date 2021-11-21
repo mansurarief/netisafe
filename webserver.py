@@ -51,6 +51,8 @@ def post():
         #add "other predictions" button
         userdata['posts'][i]['other_pred'] = other_prediction(pred_post)
         userdata['posts'][i]['other_pred_pos'] = other_prediction_button_position(pred_post)
+        is_filtered = (np.array(list(pred_post.values())) > thres['high']).sum() > 0
+        userdata['posts'][i]['is_filtered'] = is_filtered
 
         
         if post['has_comments']:
@@ -61,7 +63,8 @@ def post():
                 userdata['posts'][i]['comments'][j]['id'] = str(i)+"_"+str(j)
                 userdata['posts'][i]['comments'][j]['other_pred'] = other_prediction(pred_post)
                 userdata['posts'][i]['comments'][j]['other_pred_pos'] = other_prediction_button_position(pred_post)
-
+                is_filtered = (np.array(list(pred_post.values())) > thres['high']).sum() > 0
+                userdata['posts'][i]['comments'][j]['is_filtered'] = is_filtered
     return render_template('post.html', vars=userdata, thres=thres, logo_img=logo_img, enumerate=enumerate)
 
 @app.route('/form')
@@ -107,6 +110,8 @@ def fetch_post():
         "has_img": False,
         'other_pred' : bool(other_prediction(pred)),
         'other_pred_pos' : int(other_prediction_button_position(pred)),
+        #'pred_expl': get_explanation(message),
+        #'pred': pred,
         "post_img": '',
        "has_comments": False,
        "comments": []}

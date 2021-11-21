@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{vars['user_pagetitle']}}</title>
+    <title>Netisafe Demo</title>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/post.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="{{ url_for('static',filename='js/posts.js') }}"></script>
@@ -17,7 +17,7 @@
     <div class="header">
       <div class="header__left">
         <img
-          src="{{logo_img}}"
+          src="{{ url_for('static',filename='img/logo.png') }}"
           alt=""
         />
         <div class="header__input">
@@ -181,7 +181,7 @@
 
           <div class="post__bottom">
 
-              {% if post['pred'].toxicity > thres['high'] or post['pred'].severe_toxicity > thres['high'] or post['pred'].obscene > thres['high'] or post['pred'].threat >thres['high'] or post['pred'].insult >thres['high'] or post['pred'].identity_hate > thres['high']%}              
+              {% if post['is_filtered'] %}             
                             
               <span class="post__warning">Warning: Post hidden due to condescending remarks</span>
               <label class="collapse" for="filter_{{post['id']}}">Show post ... </label>
@@ -279,7 +279,7 @@
                 <div class="comment__main">
                   <h3>{{comment['user_fullname']}}</h3>  
 
-                  {% if comment['pred'].toxicity > thres['high'] or comment['pred'].severe_toxicity > thres['high'] or comment['pred'].obscene > thres['high'] or comment['pred'].threat >thres['high'] or comment['pred'].insult >thres['high'] or comment['pred'].identity_hate > thres['high']%} 
+                  {% if comment['is_filtered'] %} 
 
                   <span class="post__warning">Warning: comment hidden due to condescending remarks</span>
                   <label class="collapse" for="filter_comment_{{comment['id']}}">Show post ... </label>
@@ -375,5 +375,32 @@
     <div id="fb-root"></div>    
   </body>
 
+<script>
+  //setup before functions
+  var typingTimer;                //timer identifier
+  var doneTypingInterval = 5000;  //time in ms (5 seconds)
+  var myInput = document.getElementById('user_post_msg');
 
+  //on keyup, start the countdown
+  myInput.addEventListener('keyup', () => {
+      clearTimeout(typingTimer);
+      if (myInput.value) {
+          typingTimer = setTimeout(doneTyping, doneTypingInterval);
+      }
+  });
+
+  //user is "finished typing," do something
+  function doneTyping () {
+      var val1 = "The current user";
+      var val2 = myInput.value;
+     $.ajax({
+      url: "/fetch_post",
+      type: "get",
+      data: {val1: val1, val2:val2},
+      success: function(response) {
+          alert(JSON.stringify(response))
+      }           
+        });
+  }
+</script>
 </html>
