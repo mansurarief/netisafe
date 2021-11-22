@@ -9,6 +9,7 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/post.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="{{ url_for('static',filename='js/posts.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/netisafe.js') }}"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     
   </head>
@@ -57,6 +58,7 @@
         <span class="material-icons"> forum </span>
         <span class="material-icons"> notifications_active </span>
         <span class="material-icons"> expand_more </span>
+        <button onclick="toggleNetisafe()">NETISAFE PLUGIN ON/OFF</button>
       </div>
     </div>
     <!-- header ends -->
@@ -180,63 +182,65 @@
           </div>
 
           <div class="post__bottom">
+              <p class="netisafe" style="display:none;">{{post['message']}}</p>
+              <div class="netisafe" id ="postbox_{{post['message']}}"> 
+                {% if post['is_filtered'] %}             
 
-              {% if post['is_filtered'] %}             
-                            
-              <span class="post__warning">Warning: Post hidden due to condescending remarks</span>
-              <label class="collapse" for="filter_{{post['id']}}">Show post ... </label>
-              <input id="filter_{{post['id']}}" type="checkbox">
-              <div class="post__filtered">
+                <span class="post__warning">Warning: Post hidden due to condescending remarks</span>
+                <label class="collapse" for="filter_{{post['id']}}">Show post ... </label>
+                <input id="filter_{{post['id']}}" type="checkbox">
+                <div class="post__filtered">
 
-              <div class="post__explanation">
-              {% for k,(word, score) in enumerate(post['pred_expl'])%}
-                {% if score > thres['exp']%}
-                <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
-                {% else %}
-                <div class="expl_word">{{word}}</div>
-                {% endif %}
-              {%endfor%}
-              </div>
-
-              </div>
-              <p></p>
-                          
-              {%else%}
-              
-              <div class="post__explanation">
-              {% for k,(word, score) in enumerate(post['pred_expl'])%}
-                {% if score > thres['exp']%}
-                <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
-                {% else %}
-                <div class="expl_word">{{word}}</div>
-                {% endif %}
-              {%endfor%}
-              </div>
-              <p></p>
-
-              {%endif%}
-
-              {% for k,(key, value) in enumerate(post['pred'].items())%}
-              {% if post['other_pred_pos'] == k %}
-                  {% if k > 0 %}                  
-                    <label class="collapse" for="post_{{post['id']}}">Other predictions ... </label>
-                    <input id="post_{{post['id']}}" type="checkbox">
-                    <div>
+                <div class="post__explanation">
+                {% for k,(word, score) in enumerate(post['pred_expl'])%}
+                  {% if score > thres['exp']%}
+                  <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
                   {% else %}
-                      <label class="collapse" for="post_{{post['id']}}">Show predictions ... </label>
+                  <div class="expl_word">{{word}}</div>
+                  {% endif %}
+                {%endfor%}
+                </div>
+
+                </div>
+                <p></p>            
+                          
+                {%else%}
+                
+                <div class="post__explanation">
+                {% for k,(word, score) in enumerate(post['pred_expl'])%}
+                  {% if score > thres['exp']%}
+                  <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                  {% else %}
+                  <div class="expl_word">{{word}}</div>
+                  {% endif %}
+                {%endfor%}
+                </div>
+                <p></p>
+
+                {%endif%}
+
+                {% for k,(key, value) in enumerate(post['pred'].items())%}
+                {% if post['other_pred_pos'] == k %}
+                    {% if k > 0 %}                  
+                      <label class="collapse" for="post_{{post['id']}}">Other predictions ... </label>
                       <input id="post_{{post['id']}}" type="checkbox">
                       <div>
-                  {% endif %}
-                {% endif%}
-              {% if value > thres['high'] %}
-              <span class="badge-selected">{{key}} : {{value}}</span>
-              {% elif value > thres['moderate'] %}
-              <span class="badge-common">{{key}} : {{value}}</span>
-              {% else %}
-              <span class="badge-default">{{key}} : {{value}}</span>              
-              {% endif %}
-              {% endfor %}                
-              </div>                  
+                    {% else %}
+                        <label class="collapse " for="post_{{post['id']}}">Show predictions ... </label>
+                        <input id="post_{{post['id']}}" type="checkbox">
+                        <div>
+                    {% endif %}
+                  {% endif%}
+                {% if value > thres['high'] %}
+                <span class="badge-selected">{{key}} : {{value}}</span>
+                {% elif value > thres['moderate'] %}
+                <span class="badge-common">{{key}} : {{value}}</span>
+                {% else %}
+                <span class="badge-default">{{key}} : {{value}}</span>              
+                {% endif %}
+                {% endfor %}                
+                </div>  
+              </div>                
           </div>
           {% if post['has_img'] %}
           <div class="post__image">
@@ -278,58 +282,61 @@
                 />
                 <div class="comment__main">
                   <h3>{{comment['user_fullname']}}</h3>  
+                  <p class="netisafe" style="display:none;">{{comment['message']}}</p>
+                  <div class="netisafe" id="commentbox_{{comment['id']}}">
 
-                  {% if comment['is_filtered'] %} 
+                    {% if comment['is_filtered'] %} 
 
-                  <span class="post__warning">Warning: comment hidden due to condescending remarks</span>
-                  <label class="collapse" for="filter_comment_{{comment['id']}}">Show post ... </label>
-                  <input id="filter_comment_{{comment['id']}}" type="checkbox">
-                  <div class="post__filtered">                  
+                    <span class="post__warning">Warning: comment hidden due to condescending remarks</span>
+                    <label class="collapse" for="filter_comment_{{comment['id']}}">Show post ... </label>
+                    <input id="filter_comment_{{comment['id']}}" type="checkbox">
+                    <div class="post__filtered">                  
 
-                  <div class="post__explanation">
-                  {% for k,(word, score) in enumerate(comment['pred_expl'])%}
-                    {% if score > thres['exp'] %}
-                    <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                    <div class="post__explanation">
+                    {% for k,(word, score) in enumerate(comment['pred_expl'])%}
+                      {% if abs(score) > thres['exp'] %}
+                      <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                      {% else %}
+                      <div class="expl_word">{{word}}</div>
+                      {% endif %}
+                    {%endfor%}
+                    </div> 
+                    </div> 
+                    <p></p>
                     {% else %}
-                    <div class="expl_word">{{word}}</div>
+                    <div class="post__explanation">
+                    {% for k,(word, score) in enumerate(comment['pred_expl'])%}
+                      {% if abs(score) > thres['exp'] %}
+                      <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                      {% else %}
+                      <div class="expl_word">{{word}}</div>
+                      {% endif %}
+                    {%endfor%}
+                    </div> 
                     {% endif %}
-                  {%endfor%}
-                  </div> 
-                  </div> 
-                  <p></p>
-                  {% else %}
-                  <div class="post__explanation">
-                  {% for k,(word, score) in enumerate(comment['pred_expl'])%}
-                    {% if score > thres['exp'] %}
-                    <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
-                    {% else %}
-                    <div class="expl_word">{{word}}</div>
-                    {% endif %}
-                  {%endfor%}
-                  </div> 
-                  {% endif %}
 
-                  {% for k, (key, value) in enumerate(comment['pred'].items()) %}
-                  {% if comment['other_pred_pos'] == k %}
-                    {% if k > 0 %}                    
-                      <label class="collapse" for="comment_{{comment['id']}}">Other predictions ... </label>
-                      <input id="comment_{{comment['id']}}" type="checkbox">
-                      <div>
+                    {% for k, (key, value) in enumerate(comment['pred'].items()) %}
+                    {% if comment['other_pred_pos'] == k %}
+                      {% if k > 0 %}                    
+                        <label class="collapse" for="comment_{{comment['id']}}">Other predictions ... </label>
+                        <input id="comment_{{comment['id']}}" type="checkbox">
+                        <div>
+                      {% else %}
+                        <label class="collapse" for="comment_{{comment['id']}}">Show predictions ... </label>
+                        <input id="comment_{{comment['id']}}" type="checkbox">
+                        <div>
+                      {% endif %}
+                    {% endif%}
+                    {% if value > thres['high'] %}
+                    <span class="badge-selected">{{key}} : {{value}}</span>
+                    {% elif value > thres['moderate'] %}
+                    <span class="badge-common">{{key}} : {{value}}</span>                                      
                     {% else %}
-                      <label class="collapse" for="comment_{{comment['id']}}">Show predictions ... </label>
-                      <input id="comment_{{comment['id']}}" type="checkbox">
-                      <div>
+                      <span class="badge-default">{{key}} : {{value}}</span>                  
                     {% endif %}
-                  {% endif%}
-                  {% if value > thres['high'] %}
-                  <span class="badge-selected">{{key}} : {{value}}</span>
-                  {% elif value > thres['moderate'] %}
-                  <span class="badge-common">{{key}} : {{value}}</span>                                      
-                  {% else %}
-                    <span class="badge-default">{{key}} : {{value}}</span>                  
-                  {% endif %}
-                  {% endfor %}                    
-                    </div>                  
+                    {% endfor %}                    
+                      </div>
+                    </div>            
                 </div>      
               </div>
             </div>
@@ -375,32 +382,5 @@
     <div id="fb-root"></div>    
   </body>
 
-<script>
-  //setup before functions
-  var typingTimer;                //timer identifier
-  var doneTypingInterval = 5000;  //time in ms (5 seconds)
-  var myInput = document.getElementById('user_post_msg');
 
-  //on keyup, start the countdown
-  myInput.addEventListener('keyup', () => {
-      clearTimeout(typingTimer);
-      if (myInput.value) {
-          typingTimer = setTimeout(doneTyping, doneTypingInterval);
-      }
-  });
-
-  //user is "finished typing," do something
-  function doneTyping () {
-      var val1 = "The current user";
-      var val2 = myInput.value;
-     $.ajax({
-      url: "/fetch_post",
-      type: "get",
-      data: {val1: val1, val2:val2},
-      success: function(response) {
-          alert(JSON.stringify(response))
-      }           
-        });
-  }
-</script>
 </html>

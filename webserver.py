@@ -65,7 +65,7 @@ def post():
                 userdata['posts'][i]['comments'][j]['other_pred_pos'] = other_prediction_button_position(pred_post)
                 is_filtered = (np.array(list(pred_post.values())) > thres['high']).sum() > 0
                 userdata['posts'][i]['comments'][j]['is_filtered'] = is_filtered
-    return render_template('post.html', vars=userdata, thres=thres, logo_img=logo_img, enumerate=enumerate)
+    return render_template('post.html', vars=userdata, thres=thres, logo_img=logo_img, enumerate=enumerate, abs=abs)
 
 @app.route('/form')
 def form():
