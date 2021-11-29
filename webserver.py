@@ -205,4 +205,4 @@ def get_explanation(message):
             final_out.append( (clean_word, 0, "NA"))        
     return final_out    
 
-app.run(host='localhost', port=5000, debug=True)
+app.run(host='0.0.0.0', port=5000, debug=True)
