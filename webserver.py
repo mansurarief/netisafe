@@ -39,6 +39,7 @@ def post():
         userdata = json.load(file_handler)
 
     userdata['posts'] = sorted(userdata['posts'], key=lambda d: d['timestamp'], reverse=True) 
+    userdata['posts'] = userdata['posts'][:5]
     
     #add toxicity prediction to userdata
     for i, post in enumerate(userdata['posts']):
