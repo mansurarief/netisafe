@@ -277,14 +277,17 @@ body {
 }
 
 
+
 .post__explanation{
-  display:inline-flex; 
-  text-align:center;
+  /*display:inline-flex; 
+  text-align:center;*/
 }
 
 .expl_word{
   margin-left:5px;
+  display:inline-flex; 
 }
+
 
 .expl_score{
   font-size:xx-small;
