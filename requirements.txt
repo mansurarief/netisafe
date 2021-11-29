@@ -1,7 +1,7 @@
 flask
 detoxify
 scikit-learn
-torch==TORCH_VERSION+cpu
+torch==1.10.0+cpu
 lime
 pandas
 numpy
