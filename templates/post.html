@@ -192,9 +192,9 @@
                 <div class="post__filtered">
 
                 <div class="post__explanation">
-                {% for k,(word, score) in enumerate(post['pred_expl'])%}
+                {% for k,(word, score, category) in enumerate(post['pred_expl'])%}
                   {% if score > thres['exp']%}
-                  <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                  <div class="expl_word expl_score_{{category}}"><u>{{word}}</u><div class="expl_score">({{category}})</div></div>
                   {% else %}
                   <div class="expl_word">{{word}}</div>
                   {% endif %}
@@ -207,9 +207,9 @@
                 {%else%}
                 
                 <div class="post__explanation">
-                {% for k,(word, score) in enumerate(post['pred_expl'])%}
+                {% for k,(word, score, category) in enumerate(post['pred_expl'])%}
                   {% if score > thres['exp']%}
-                  <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                  <div class="expl_word expl_score_{{category}}"><u>{{word}}</u><div class="expl_score">({{category}})</div></div>
                   {% else %}
                   <div class="expl_word">{{word}}</div>
                   {% endif %}
@@ -232,11 +232,11 @@
                     {% endif %}
                   {% endif%}
                 {% if value > thres['high'] %}
-                <span class="badge-selected">{{key}} : {{value}}</span>
+                <span class="badge-selected">{{key}} : {{post['pred_cat'][k]}}</span>
                 {% elif value > thres['moderate'] %}
-                <span class="badge-common">{{key}} : {{value}}</span>
+                <span class="badge-common">{{key}} :  {{post['pred_cat'][k]}}</span>
                 {% else %}
-                <span class="badge-default">{{key}} : {{value}}</span>              
+                <span class="badge-default">{{key}} :  {{post['pred_cat'][k]}}</span>              
                 {% endif %}
                 {% endfor %}                
                 </div>  
@@ -293,9 +293,9 @@
                     <div class="post__filtered">                  
 
                     <div class="post__explanation">
-                    {% for k,(word, score) in enumerate(comment['pred_expl'])%}
+                    {% for k,(word, score, category) in enumerate(comment['pred_expl'])%}
                       {% if abs(score) > thres['exp'] %}
-                      <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                      <div class="expl_word"><u><span class="expl_score_{{category}}">{{word}}</span></u><div class="expl_score">({{category}})</div></div>
                       {% else %}
                       <div class="expl_word">{{word}}</div>
                       {% endif %}
@@ -305,9 +305,9 @@
                     <p></p>
                     {% else %}
                     <div class="post__explanation">
-                    {% for k,(word, score) in enumerate(comment['pred_expl'])%}
+                    {% for k,(word, score, category) in enumerate(comment['pred_expl'])%}
                       {% if abs(score) > thres['exp'] %}
-                      <div class="expl_word"><u>{{word}}</u><div class="expl_score">({{score}})</div></div>
+                      <div class="expl_word"><u><span class="expl_score_{{category}}">{{word}}</span></u><div class="expl_score">({{category}})</div></div>
                       {% else %}
                       <div class="expl_word">{{word}}</div>
                       {% endif %}
@@ -328,11 +328,11 @@
                       {% endif %}
                     {% endif%}
                     {% if value > thres['high'] %}
-                    <span class="badge-selected">{{key}} : {{value}}</span>
+                    <span class="badge-selected">{{key}} : {{comment['pred_cat'][k]}}</span>
                     {% elif value > thres['moderate'] %}
-                    <span class="badge-common">{{key}} : {{value}}</span>                                      
+                    <span class="badge-common">{{key}} : {{comment['pred_cat'][k]}}</span>                                      
                     {% else %}
-                      <span class="badge-default">{{key}} : {{value}}</span>                  
+                      <span class="badge-default">{{key}} : {{comment['pred_cat'][k]}}</span>                  
                     {% endif %}
                     {% endfor %}                    
                       </div>

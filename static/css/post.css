@@ -227,6 +227,10 @@ body {
   background-color: #eff2f5;
 }
 
+.messageSender__input {
+  width: 100%;
+}
+
 .messageSender__bottom {
   display: flex;
   justify-content: space-evenly;
@@ -286,6 +290,36 @@ body {
 .expl_word{
   margin-left:5px;
   display:inline-flex; 
+}
+
+.expl_score_low{
+  text-decoration-color: darkgray;
+  text-decoration-thickness: 3px;
+}
+
+.expl_score_high{
+  text-decoration-color: red;
+  text-decoration-thickness: 3px;
+}
+
+.expl_score_moderate{
+  text-decoration-color: lightgoldenrodyellow;
+  text-decoration-thickness: 3px;
+}
+
+.expl_score_verylow{
+  text-decoration-color: lightgray;
+  text-decoration-thickness: 3px;
+}
+
+.expl_score_NA{
+  text-decoration-color: white;
+  text-decoration-thickness: 0px;
+}
+
+.expl_score_negative{
+  text-decoration-color: green;
+  text-decoration-thickness: 3px;
 }
 
 

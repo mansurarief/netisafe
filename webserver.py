@@ -46,6 +46,7 @@ def post():
 
         #add into original data
         userdata['posts'][i]['pred'] = pred_post
+        userdata['posts'][i]['pred_cat'] = categorical_prediction(pred_post)
         userdata['posts'][i]['pred_expl'] = get_explanation(post['message'])
 
         #add "other predictions" button
@@ -59,12 +60,14 @@ def post():
             for j, comment in enumerate(post['comments']):
                 pred_post = get_prediction(comment['message'], model)
                 userdata['posts'][i]['comments'][j]['pred'] = pred_post   
+                userdata['posts'][i]['comments'][j]['pred_cat'] = categorical_prediction(pred_post)
                 userdata['posts'][i]['comments'][j]['pred_expl'] = get_explanation(comment['message'])             
                 userdata['posts'][i]['comments'][j]['id'] = str(i)+"_"+str(j)
                 userdata['posts'][i]['comments'][j]['other_pred'] = other_prediction(pred_post)
                 userdata['posts'][i]['comments'][j]['other_pred_pos'] = other_prediction_button_position(pred_post)
                 is_filtered = (np.array(list(pred_post.values())) > thres['high']).sum() > 0
                 userdata['posts'][i]['comments'][j]['is_filtered'] = is_filtered
+
     return render_template('post.html', vars=userdata, thres=thres, logo_img=logo_img, enumerate=enumerate, abs=abs)
 
 @app.route('/form')
@@ -151,6 +154,45 @@ def get_prediction(message, model):
     return pred_post
 
 
+def get_categorical(score, neg=-0.001, very_low = 0.000001, low=0.00001, mod=0.0001, high=0.001):    
+    if score >= high:
+        out = "high"
+    elif score >= mod:
+        out = "moderate"
+    elif score >= low:
+        out = "low"
+    elif score >= very_low:
+        out = "verylow"
+    elif score <= neg:
+        out = "negative"
+    else:
+        out = "NA"
+    return out
+
+def categorical_prediction(pred, neg=0, very_low = 0.01, low=0.01, mod=thres['moderate'], high=thres['high']):    
+    categories = []
+    for score in pred.values():
+        if score >= high:
+            out = "high"
+        elif score >= mod:
+            out = "moderate"
+        elif score >= low:
+            out = "low"
+        elif score >= very_low:
+            out = "verylow"
+        elif score <= neg:
+            out = "negative"
+        else:
+            out = "NA"
+        categories.append(out)
+
+   
+    return categories
+
+
+
+
+
 def get_explanation(message):
     exp = explainer.explain_instance(message, predictor, num_features=10, num_samples=20)
     score_dict = dict(exp.as_list())
@@ -158,9 +200,9 @@ def get_explanation(message):
     for word in re.split("\s|(?<!\d)['](?!\d)", message):
         clean_word = re.sub(r'[^\w\s]','',word)
         if clean_word  in score_dict.keys():
-            final_out.append( (clean_word, np.round(score_dict[clean_word], 4)))
+            final_out.append( (clean_word, np.round(score_dict[clean_word], 4), get_categorical(score_dict[clean_word])))
         elif clean_word != '':   
-            final_out.append( (clean_word, 0))        
+            final_out.append( (clean_word, 0, "NA"))        
     return final_out    
 
 app.run(host='localhost', port=5000, debug=True)
