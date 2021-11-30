@@ -1,3 +1,16 @@
+### Name
+
+NetiSafe - Web plug-in to detoxify social networks
+
+
+### Description
+
+This is a project originated from a course project at CMU. 
+
+NetiSafe is an AI powered software solution empowers users to create healthier and more inclusive environments in digital platforms. 
+
+
+
 ### Installation
 
 1. Clone the repo
