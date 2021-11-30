@@ -44,7 +44,7 @@ keymaps = {"low":"class_low", "moderate": "class_mod", "high": "class_high"}
 
 
 def post():
-    post_data = os.listdir("static/json/")
+    post_data = sorted(os.listdir("static/json/"))
     with open("data/user_data_only.json", "r") as file_handler:    
         userdata = json.load(file_handler)
     return render_template('post_2.html', vars=userdata, post_data=post_data, thres=thres, logo_img=logo_img, enumerate=enumerate, abs=abs)
