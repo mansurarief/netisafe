@@ -1,0 +1,32 @@
+<!-- post starts -->
+<div class="post">
+  <div class="post__top">
+    <img class="user__avatar post__avatar" src={{post['avatar_img']}} alt=""/>
+    <div class="post__topInfo">
+      <h3>{% raw %}{{user_fullname}}{% endraw %}</h3>
+      <p>{% raw %}{{date_text}}{% endraw %}</p>
+    </div>
+  </div>
+  <div class="post__bottom">
+      <p class="netisafe" style="display:none;">{% raw %}{{message}}{% endraw %}</p>              
+
+  <div class="post__options">
+    <div class="post__option">              
+      <span class="material-icons"> thumb_up </span>
+      <p>Like</p>
+    </div>
+
+    <div class="post__option">
+      <span class="material-icons"> chat_bubble_outline </span>
+      <p>Comment</p>
+    </div>
+
+    <div class="post__option">
+      <span class="material-icons"> near_me </span>
+      <p>Share</p>
+    </div>
+  </div>          
+</div>
+<!-- post ends -->
+
+

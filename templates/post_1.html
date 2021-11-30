@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Netisafe Demo</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/post.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='js/posts.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/netisafe.js') }}"></script>
+    <script src="{{ url_for('static',filename='temps/post_content.html') }}" id="postTmpl" type="text/template"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    
+  </head>
+  <body>
+    <!-- header starts -->
+    <div class="header">
+      <div class="header__left">
+        <img
+          src="{{ url_for('static',filename='img/logo.png') }}"
+          alt=""
+        />
+        <div class="header__input">
+          <span class="material-icons"> search </span>
+          <input type="text" placeholder="Search" />
+        </div>
+      </div>
+
+      <div class="header__middle">
+        <div class="header__option active">
+          <span class="material-icons"> home </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> flag </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> subscriptions </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> storefront </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> supervised_user_circle </span>
+        </div>
+      </div>
+
+      <div class="header__right">
+        <div class="header__info">
+          <img
+            class="user__avatar"
+            src={{vars['avatar_img']}}
+            alt=""
+          />
+          <h4>{{vars['user_fullname']}}</h4>
+        </div>
+        <span class="material-icons"> add </span>
+        <span class="material-icons"> forum </span>
+        <span class="material-icons"> notifications_active </span>
+        <span class="material-icons"> expand_more </span>
+        <button onclick="toggleNetisafe()">NETISAFE PLUGIN ON/OFF</button>
+        <button id="btn">Load</button>
+      </div>
+    </div>
+    <!-- header ends -->
+
+    <!-- main body starts -->
+    <div class="main__body">
+      <!-- sidebar starts -->
+      <div class="sidebar">
+        <div class="sidebarRow">
+          <img
+            class="user__avatar"
+            src={{vars['avatar_img']}}
+            alt=""
+          />
+          <h4>{{vars['user_fullname']}}</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> local_hospital </span>
+          <h4>Covid - 19 Information Center</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> emoji_flags </span>
+          <h4>Pages</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> people </span>
+          <h4>People</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> chat </span>
+          <h4>Messenger</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> storefront </span>
+          <h4>Marketplace</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> video_library </span>
+          <h4>Videos</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> expand_more </span>
+          <h4>More</h4>
+        </div>
+      </div>
+      <!-- sidebar ends -->
+
+      <!-- feed starts -->
+      <div class="feed">
+        <div class="storyReel">
+          {% for story in vars['stories'] %}
+          <!-- story starts -->          
+          <div
+            style="background-image: url('{{story['bg_img']}}');"
+            class="story"
+          >
+            <img
+              class="user__avatar story__avatar"
+              src="{{story['avatar_img']}}"
+              alt=""
+            />
+            <h4>{{story['message']}}</h4>
+          </div>
+          <!-- story ends -->
+          {% endfor %}          
+        </div>
+
+          <!-- message sender starts -->
+          <div class="messageSender">
+            <div class="messageSender__top">
+              <img
+                class="user__avatar"
+                src={{vars['avatar_img']}}
+                alt=""
+              />              
+                <input class="messageSender__input" placeholder="What's on your mind?" type="text" id="user_post_msg"/>
+                <button class='get_result'>Post</button>
+            </div>
+
+            <div class="messageSender__bottom">
+              <div class="messageSender__option">
+                <span style="color: red" class="material-icons"> videocam </span>
+                <h3>Live</h3>
+              </div>
+
+              <div class="messageSender__option">
+                <span style="color: green" class="material-icons"> photo_library </span>
+                <h3>Photo</h3>
+              </div>
+
+              <div class="messageSender__option">
+                <span style="color: orange" class="material-icons"> insert_emoticon </span>
+                <h3>Feeling</h3>
+              </div>
+            </div>
+          </div>
+          <!-- message sender ends -->
+        <div id="target"></div>        
+      </div>
+      <!-- feed ends -->
+    </div>
+    <!-- main body ends -->
+    <div id="fb-root"></div>    
+  </body>
+  <script>
+    function test_func(data) {
+        console.log(data);
+    }
+    test_func({{ json_vars|safe }}) ;
+  </script>
+
+  <script>
+  $(document).ready(function(){  
+    var template_post = `
+    <!-- post starts -->
+    <div class="post">
+      <div class="post__top">
+        <img class="user__avatar post__avatar" src={% raw %}{{avatar_img}}{% endraw %} alt=""/>
+        <div class="post__topInfo">
+          <h3>{% raw %}{{user_fullname}}{% endraw %}</h3>
+          <p>{% raw %}{{date_text}}{% endraw %}</p>
+        </div>
+      </div>
+      <div class="post__bottom">
+        <p class="netisafe" style="display:none;">{% raw %}{{message}}{% endraw %}</p>
+        <div class="post__options">
+          <div class="post__option">
+            <span class="material-icons"> thumb_up </span><p>Like</p>
+          </div>
+          <div class="post__option">
+            <span class="material-icons"> chat_bubble_outline </span><p>Comment</p>
+          </div>
+          <div class="post__option"><span class="material-icons"> near_me </span><p>Share</p></div>
+        </div>
+      </div>
+    </div>
+    <!-- post ends -->
+    `;
+    data =  {{ json_vars|safe }};
+    data['posts'].forEach(render_mustache);
+    document.getElementById("target").innerHTML = rendered; 
+    var rendered = '';
+    function render_mustache(post_data){
+      console.log(post_data);
+      rendered += Mustache.render(template_post, post_data);
+    }
+
+  });
+</script>
+</html>

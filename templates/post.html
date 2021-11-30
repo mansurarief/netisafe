@@ -252,14 +252,16 @@
           {% endif %}
 
           <div class="post__options">
-            <div class="post__option">
+            <div class="post__option">              
               <span class="material-icons"> thumb_up </span>
               <p>Like</p>
             </div>
 
             <div class="post__option">
+              <a onclick="showComment(post_comment_{{post['id']}})">
               <span class="material-icons"> chat_bubble_outline </span>
               <p>Comment</p>
+              </a>
             </div>
 
             <div class="post__option">
@@ -337,10 +339,9 @@
                     {% endfor %}                    
                       </div>
                     </div>            
-                </div>      
+                  </div>      
+                </div>
               </div>
-            </div>
-
               <div class="comment__options">
                 <p>Like   &#183; Comment &#183; {{comment['time_ago']}}</p>
               </div> 
@@ -353,34 +354,41 @@
                   class="user__avatar post__avatar"
                   src="{{vars['avatar_img']}}"
                   alt=""
-                />
-              
+                />            
                 <div class="comment__input">
-                  <form>
-                    <input class="messageSender__input" placeholder="What's on your mind?" type="text" />
-                  </form>        
+                    <input class="messageSender__input" id="post_comment_{{post['id']}}" placeholder="What's on your mind?" type="text" />     
                 </div>      
-              </div>              
-              
+              </div>                            
             </div>
-            <!---a comment ends -->
-          
+            <!---a comment ends -->          
+          </div>
+          <!---comments ends -->
+          {% else %}
+          <!-- comments begin-->                  
+          <div class="post__comments">            
+            <div class="comment">            
+              <div class="comment__top">
+                <img
+                  class="user__avatar post__avatar"
+                  src="{{vars['avatar_img']}}"
+                  alt=""
+                />            
+                <div class="comment__input">
+                    <input class="messageSender__input" id="post_comment_{{post['id']}}" placeholder="What's on your mind?" type="text" />     
+                </div>      
+              </div>                            
+            </div>
+            <!---a comment ends -->          
           </div>
           <!---comments ends -->
           {% endif %}
-
         </div>
         <!-- post ends -->
         {% endfor %}
-
       </div>
       <!-- feed ends -->
-
     </div>
     <!-- main body ends -->
-
     <div id="fb-root"></div>    
   </body>
-
-
 </html>

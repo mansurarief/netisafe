@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Netisafe Demo</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/post.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='js/posts.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/netisafe.js') }}"></script>
+    <script src="{{ url_for('static',filename='temps/post_content.html') }}" id="postTmpl" type="text/template"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    
+  </head>
+  <body>
+    <!-- header starts -->
+    <div class="header">
+      <div class="header__left">
+        <img
+          src="{{ url_for('static',filename='img/logo.png') }}"
+          alt=""
+        />
+        <div class="header__input">
+          <span class="material-icons"> search </span>
+          <input type="text" placeholder="Search" />
+        </div>
+      </div>
+
+      <div class="header__middle">
+        <div class="header__option active">
+          <span class="material-icons"> home </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> flag </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> subscriptions </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> storefront </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> supervised_user_circle </span>
+        </div>
+      </div>
+
+      <div class="header__right">
+        <div class="header__info">
+          <img
+            class="user__avatar"
+            src={{vars['avatar_img']}}
+            alt=""
+          />
+          <h4>{{vars['user_fullname']}}</h4>
+        </div>
+        <span class="material-icons"> add </span>
+        <span class="material-icons"> forum </span>
+        <span class="material-icons"> notifications_active </span>
+        <span class="material-icons"> expand_more </span>
+        <button class="netisafe_button" onclick="toggleNetisafe()">
+          <div class="tooltip" >                  
+          <span style="font-size:small;">NETISAFE PLUGIN ON/OFF </span>
+          <span style="color:dodgerblue; font-size:small; margin:0px;" class="material-icons">info</span>
+          <span class="tooltiptext tooltip-bottom">You can always turn on/off Netisafe anytime.</span>
+          </div>
+        </button>
+        
+        
+          
+        
+
+        
+      </div>
+    </div>
+    <!-- header ends -->
+
+    <!-- main body starts -->
+    <div class="main__body">
+      <!-- sidebar starts -->
+      <div class="sidebar">
+        <div class="sidebarRow">
+          <img
+            class="user__avatar"
+            src={{vars['avatar_img']}}
+            alt=""
+          />
+          <h4>{{vars['user_fullname']}}</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> local_hospital </span>
+          <h4>Covid - 19 Information Center</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> emoji_flags </span>
+          <h4>Pages</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> people </span>
+          <h4>People</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> chat </span>
+          <h4>Messenger</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> storefront </span>
+          <h4>Marketplace</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> video_library </span>
+          <h4>Videos</h4>
+        </div>
+
+        <div class="sidebarRow">
+          <span class="material-icons"> expand_more </span>
+          <h4>More</h4>
+        </div>
+      </div>
+      <!-- sidebar ends -->
+
+      <!-- feed starts -->
+      <div class="feed">
+        <div class="storyReel">
+          {% for story in vars['stories'] %}
+          <!-- story starts -->          
+          <div
+            style="background-image: url('{{story['bg_img']}}');"
+            class="story"
+          >
+            <img
+              class="user__avatar story__avatar"
+              src="{{story['avatar_img']}}"
+              alt=""
+            />
+            <h4>{{story['message']}}</h4>
+          </div>
+          <!-- story ends -->
+          {% endfor %}          
+        </div>
+
+          <!-- message sender starts -->
+          <div class="messageSender">
+            <div class="messageSender__top">
+              <img
+                class="user__avatar"
+                src={{vars['avatar_img']}}
+                alt=""
+              />              
+                <input class="messageSender__input" placeholder="What's on your mind?" type="text" id="user_post_msg"/>
+                <input type="hidden" id="user_fullname" value="{{vars['user_fullname']}}"/>
+                <input type="hidden" id="user_avatar_img" value="{{vars['avatar_img']}}"/>
+                <button class="netisafe_button" onclick="post_new_post()">Post</button>
+            </div>
+
+            <div class="messageSender__bottom">
+              <div class="messageSender__option">
+                <span style="color: red" class="material-icons"> videocam </span>
+                <h3>Live</h3>
+              </div>
+
+              <div class="messageSender__option">
+                <span style="color: green" class="material-icons"> photo_library </span>
+                <h3>Photo</h3>
+              </div>
+
+              <div class="messageSender__option">
+                <span style="color: orange" class="material-icons"> insert_emoticon </span>
+                <h3>Feeling</h3>
+              </div>
+            </div>
+          </div>
+          <!-- message sender ends -->
+        <div class="full_width_panel" id="target" ></div>        
+      </div>
+      <!-- feed ends -->
+    </div>
+    <!-- main body ends -->
+    <div id="fb-root"></div>    
+  </body>
+
+  <script>
+    var template_post = `
+<!-- post starts -->
+<div class="post">
+
+  <div class="post__top">
+    <img class="user__avatar post__avatar" src={% raw %}{{avatar_img}}{% endraw %} alt=""/>
+    <div class="post__topInfo">
+      <h3>{% raw %}{{user_fullname}}{% endraw %}</h3>
+      <p>{% raw %}{{date_text}}{% endraw %}</p>
+    </div>
+  </div>
+
+  <div class="post__bottom">
+    <p class="netisafe" style="display:none; padding:10px 0px;">{% raw %}{{message}}{% endraw %}</p>
+    {% raw %}{{#filter_status}}{% endraw %}
+    <!-- filtering starts -->
+    <div class="netisafe filter_box">      
+      <span class="post__warning">{% raw %}{{message}}{% endraw %}</span>
+      <div class="tooltip" >
+        <span>Why?</span>
+        <span style="font-size:x-small;" class="material-icons tooltip_icon">info</span>
+        <span class="tooltiptext tooltip-top">We enable users to filter toxic contents from their social media and create a healthier digital platform. You can still show the content by clicking "Show post ..." button in the right if you so decide. </span>
+      </div> 
+
+      <label class="collapse" for="filter_{% raw %}{{filtered_id}}{% endraw %}">Show post ... </label>
+      <input id="filter_{% raw %}{{filtered_id}}{% endraw %}" type="checkbox">
+      
+      <div class="post__filtered">
+        <!-- explanation starts -->
+        <div class="post__explanation">
+          {% raw %}{{#pred_expl}}{% endraw %}
+          <div class="expl_word expl_score_{% raw %}{{category}}{% endraw %}">
+              <u>{% raw %}{{word}}{% endraw %}</u>
+              <div class="expl_score" style="display:none;">
+                ({% raw %}{{category}}{% endraw %})
+              </div>
+          </div>
+          {% raw %}{{/pred_expl}}{% endraw %}
+
+          <div class="tooltip" >What is this? <span style="font-size:x-small;" class="material-icons tooltip_icon">info</span>
+            <span class="tooltiptext tooltip-top">The contribution of each underlined word (if any) in the sentence/paragraph as a whole that drives toxicity score predicted by the AI model (red = high, blue = moderate, gray = low)</span>
+          </div>        
+        </div> <!-- explanation ends -->
+      </div> 
+    </div> <!-- filtering ends -->      
+    {% raw %}{{/filter_status}}{% endraw %}
+
+    {% raw %}{{^filter_status}}{% endraw %}        
+    <!-- filtering starts -->      
+    <div class="netisafe nonfilter_box post__filtered"> 
+      <div class="post__explanation netisafe" style="display:block;">
+        {% raw %}{{#pred_expl}}{% endraw %}
+        <div class="expl_word expl_score_{% raw %}{{category}}{% endraw %}">
+            <u>{% raw %}{{word}}{% endraw %}</u>
+            <div class="expl_score" style="display:none;">
+              ({% raw %}{{category}}{% endraw %})
+            </div>
+        </div>         
+        {% raw %}{{/pred_expl}}{% endraw %}        
+        <div class="tooltip" >
+          <span>What is this?</span>
+          <span style="font-size:x-small;" class="material-icons tooltip_icon">info</span>
+          <span class="tooltiptext">The contribution of each underlined word (if any) in the sentence/paragraph as a whole that drives toxicity score predicted by the AI model (red = high, blue = moderate, gray = low)</span>
+        </div>  
+      </div>
+      <p></p>    
+    </div><!-- filtering ends -->   
+    {% raw %}{{/filter_status}}{% endraw %}
+
+    <div class="predictions netisafe" style="display:block;">
+      {% raw %}{{#main_pred}}{% endraw %}
+      <span class="badge-{% raw %}{{category}}{% endraw %}">
+        {% raw %}{{class}}{% endraw %} : {% raw %}{{category}}{% endraw %}
+      </span>
+      {% raw %}{{/main_pred}}{% endraw %}
+
+      {% raw %}{{#other_pred}}{% endraw %}
+      <span class="badge-{% raw %}{{category}}{% endraw %}">
+        {% raw %}{{class}}{% endraw %} : {% raw %}{{category}}{% endraw %}
+      </span>
+      {% raw %}{{/other_pred}}{% endraw %}
+
+      <div class="tooltip" >
+        <span>How Netisafe predicts these?</span>
+        <span style="font-size:x-small;" class="material-icons tooltip_icon">info</span>
+        <span class="tooltiptext tooltip-top">The system directly converts your post into a vector representation, passes it into a  pretrained machine learning model, and returns the score for each toxicity category. We do not store your social media posts in our system.</span>
+      </div> 
+    </div>
+
+    <div class="post__options">
+      <div class="post__option">
+        <span class="material-icons"> thumb_up </span>
+        <span>Like</span>
+      </div>
+      <div class="post__option">
+        <a class="flex" onclick="showComment({% raw %}{{id}}{% endraw %})">
+          <span id=""class="material-icons"> chat_bubble_outline </span>
+          <span>Comment</span>
+        </a>
+      </div>
+      <div class="post__option">
+        <span class="material-icons"> near_me </span>
+        <span>Share</span>
+      </div>
+    </div><!-- post__options ends -->   
+  </div><!-- post__bottom ends -->   
+
+  <!-- comments begin-->          
+  <div id="comments_for_{% raw %}{{id}}{% endraw %}"  class="post__comments" style="display:block;">
+    {% raw %}{{#comments}}{% endraw %}
+    <div class="comment">            
+      <div class="comment__top">
+        <img
+          class="user__avatar post__avatar"
+          src={% raw %}{{avatar_img}}{% endraw %}
+          alt=""
+        />
+    
+        <div class="comment__main">
+          <h3>{% raw %}{{user_fullname}}{% endraw %}</h3>  
+          <p class="netisafe" style="display:none;">{% raw %}{{message}}{% endraw %}</p>
+          
+          {% raw %}{{#filter_status}}{% endraw %}
+          <div class="netisafe filter_box"><!-- filtering starts-->          
+            <span class="post__warning">{% raw %}{{message}}{% endraw %}</span>
+
+            <div class="tooltip" >
+              <span>Why?</span>
+              <span style="font-size:x-small;" class="material-icons tooltip_icon">info</span>
+              <span class="tooltiptext">We enable users to filter toxic contents from their social media and create a healthier digital platform. You can still show the content by clicking "Show comment ..." button in the right if you so decide. </span>
+            </div>
+
+            <label class="collapse" for="filter_comment_{% raw %}{{filtered_id}}{% endraw %}">Show comment ... </label>
+            <input id="filter_comment_{% raw %}{{filtered_id}}{% endraw %}" type="checkbox">
+
+            <div class="post__filtered">
+              <div class="post__explanation netisafe" style="display:block;">
+                {% raw %}{{#pred_expl}}{% endraw %}
+                <div class="expl_word expl_score_{% raw %}{{category}}{% endraw %}">
+                    <u>{% raw %}{{word}}{% endraw %}</u>
+                    <div class="expl_score" style="display:none;">
+                      ({% raw %}{{category}}{% endraw %})
+                    </div>
+                </div>         
+                {% raw %}{{/pred_expl}}{% endraw %}
+                <div class="tooltip" >
+                  <span>What is this?</span>
+                  <span style="font-size:x-small;" class="material-icons tooltip_icon">info</span>
+                  <span class="tooltiptext tooltip-top">The contribution of each underlined word (if any) in the sentence/paragraph as a whole that drives toxicity score predicted by the AI model (red = high, blue = moderate, gray = low)</span>
+                </div>  
+              </div><!-- explanation ends-->          
+            </div>
+          </div><!-- filtering ends-->  
+          {% raw %}{{/filter_status}}{% endraw %}
+          {% raw %}{{^filter_status}}{% endraw %}
+          <div class="netisafe nonfilter_box post__filtered"><!-- filtering starts-->          
+            <div class="post__explanation netisafe" style="display:block;">
+              {% raw %}{{#pred_expl}}{% endraw %}
+              <div class="expl_word expl_score_{% raw %}{{category}}{% endraw %}">
+                  <u>{% raw %}{{word}}{% endraw %}</u>
+                  <div class="expl_score" style="display:none;">({% raw %}{{category}}{% endraw %})</div>
+              </div>         
+              {% raw %}{{/pred_expl}}{% endraw %}
+
+              <div class="tooltip" >What is this? <span style="font-size:x-small;" class="material-icons tooltip_icon">info</span>
+                <span class="tooltiptext tooltip-top">The contribution of each underlined word (if any) in the sentence/paragraph as a whole that drives toxicity score predicted by the AI model (red = high, blue = moderate, gray = low)</span>
+              </div>
+            </div><!-- explanation ends-->  
+          </div><!-- filtering ends-->  
+          {% raw %}{{/filter_status}}{% endraw %}                            
+          <p></p>
+
+          <div class="predictions netisafe" style="display:block;">
+            {% raw %}{{#main_pred}}{% endraw %}
+            <span class="badge-{% raw %}{{category}}{% endraw %}">
+              {% raw %}{{class}}{% endraw %} : {% raw %}{{category}}{% endraw %}
+            </span>
+            {% raw %}{{/main_pred}}{% endraw %}
+
+            {% raw %}{{#other_pred}}{% endraw %}
+            <span class="badge-{% raw %}{{category}}{% endraw %}">
+              {% raw %}{{class}}{% endraw %} : {% raw %}{{category}}{% endraw %}
+            </span>
+            {% raw %}{{/other_pred}}{% endraw %}
+
+            <div class="tooltip">
+              <span>How Netisafe predicts these?</span>
+              <span style="font-size:x-small;" class="material-icons tooltip_icon">info</span>
+              <span class="tooltiptext tooltip-top">The system directly converts your post into a vector representation, passes it into a  pretrained machine learning model, and returns the score for each toxicity category. We do not store your social media comments in our system.</span>
+            </div>
+          </div><!-- prediction ends-->                
+        </div><!-- comment__main ends-->
+      </div><!---comment__top ends -->       
+
+      <div class="comment__options">
+        <p>Like   &#183; Comment &#183; {% raw %}{{time_ago}}{% endraw %}</p>
+      </div> 
+
+    </div><!---a comment ends -->
+    {% raw %}{{/comments}}{% endraw %} 
+
+    <div class="comment">            
+      <div class="comment__top">
+        <img
+          class="user__avatar post__avatar"
+          src={{vars['avatar_img']}}
+          alt=""
+        /> 
+                 
+        <div class="comment__input">
+            <input class="messageSender__input" id="post_comment_{% raw %}{{id}}{% endraw %}" placeholder="What's on your mind?" type="text" />
+            <button class="comment_button netisafe_button" onclick="post_comment({% raw %}{{id}}{% endraw %})">Post comment</button>
+        </div>  
+      </div><!---comment__top ends -->       
+    </div><!---a comment ends --> 
+
+  </div><!---comments ends -->
+</div><!-- post ends -->
+`;
+
+    function render_mustache(post_data){      
+      rendered = Mustache.render(template_post, post_data) + rendered;
+    }
+
+    var rendered = '';
+
+    function post_new_post() {
+      var new_post = document.getElementById('user_post_msg').value
+      var user_fullname = document.getElementById('user_fullname').value
+      var avatar_img = document.getElementById('user_avatar_img').value
+
+      $.ajax({
+          url: "/new_post",
+          type: "get",
+          data: {val1: user_fullname, val2:new_post, val3: avatar_img},
+          success: function(response) {   
+            get_post(response);
+            document.getElementById('user_post_msg').value = "";
+          },
+        });
+    }
+
+    function attach_post_to_target(post_data, target) {
+      rendered = document.getElementById(target).innerHTML;
+      render_mustache(post_data);
+      document.getElementById(target).innerHTML = rendered;
+    }
+
+    function get_post(post_file) {    
+      var post;    
+      $.ajax({
+        url: "/get_post",
+        type: "get",
+        data: {post_file: post_file},
+        success: function(response) {
+          attach_post_to_target(response, 'target');
+        },
+       });      
+    }
+    var list_post = {{post_data | safe}};
+    list_post.forEach(element => get_post(element));
+
+</script>
+
+
+</html>

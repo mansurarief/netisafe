@@ -7,7 +7,7 @@ $(document).ready(function(){
       type: "get",
       data: {val1: val1, val2:val2},
       success: function(response) {            
-        const PostItem = ({ id, message, user_fullname, avatar_img, timestamp}) => `
+        const PostItem = ({ id, message, user_fullname, avatar_img, date_text}) => `
         <!-- post starts -->
         <div class="post" id="${id}">
           <div class="post__top">
@@ -18,7 +18,7 @@ $(document).ready(function(){
             />
             <div class="post__topInfo">
               <h3>${user_fullname}</h3>
-              <p>${timestamp}</p>
+              <p>${date_text}</p>
             </div>
           </div>
 

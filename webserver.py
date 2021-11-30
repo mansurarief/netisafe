@@ -30,12 +30,13 @@ explainer = LimeTextExplainer(class_names=class_names)
 logo_img = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png' #'https://i.pravatar.cc/100'
 
 thres = {"exp":0.0001, "moderate": 0.1, "high": 0.7}
+keymaps = {"low":"class_low", "moderate": "class_mod", "high": "class_high"}
 
 @app.route('/')
 
 
 def post():
-    with open("data/user_data.json", "r") as file_handler:    
+    with open("data/user_data_0.json", "r") as file_handler:    
         userdata = json.load(file_handler)
 
     userdata['posts'] = sorted(userdata['posts'], key=lambda d: d['timestamp'], reverse=True) 
@@ -52,7 +53,7 @@ def post():
         userdata['posts'][i]['other_pred'] = other_prediction(pred_post)
         userdata['posts'][i]['other_pred_pos'] = other_prediction_button_position(pred_post)
         is_filtered = (np.array(list(pred_post.values())) > thres['high']).sum() > 0
-        userdata['posts'][i]['is_filtered'] = is_filtered
+        userdata['posts'][i]['is_filtered'] = bool(is_filtered)
 
         
         if post['has_comments']:
@@ -64,8 +65,8 @@ def post():
                 userdata['posts'][i]['comments'][j]['other_pred'] = other_prediction(pred_post)
                 userdata['posts'][i]['comments'][j]['other_pred_pos'] = other_prediction_button_position(pred_post)
                 is_filtered = (np.array(list(pred_post.values())) > thres['high']).sum() > 0
-                userdata['posts'][i]['comments'][j]['is_filtered'] = is_filtered
-    return render_template('post.html', vars=userdata, thres=thres, logo_img=logo_img, enumerate=enumerate, abs=abs)
+                userdata['posts'][i]['comments'][j]['is_filtered'] = bool(is_filtered)
+    return render_template('post_1.html', vars=userdata, json_vars=json.dumps(userdata, cls=CustomJSONizer), thres=thres, logo_img=logo_img, enumerate=enumerate, abs=abs)
 
 @app.route('/form')
 def form():
@@ -135,7 +136,7 @@ def other_prediction_button_position(pred_post, thres=0.1):
     else:
         out=0
 
-    return out
+    return int(out)
 
 def get_prediction(message, model):
 
@@ -143,7 +144,7 @@ def get_prediction(message, model):
     pred_post = model.predict(message)
 
     #apply rounding
-    pred_post = {str(key): value.round(3) for key, value in pred_post.items()}
+    pred_post = {str(key): float(value.round(3)) for key, value in pred_post.items()}
 
     #apply sorting
     pred_post = dict(sorted(pred_post.items(), key=lambda item: item[1], reverse=True))
@@ -158,9 +159,15 @@ def get_explanation(message):
     for word in re.split("\s|(?<!\d)['](?!\d)", message):
         clean_word = re.sub(r'[^\w\s]','',word)
         if clean_word  in score_dict.keys():
-            final_out.append( (clean_word, np.round(score_dict[clean_word], 4)))
+            final_out.append( (clean_word, float(np.round(score_dict[clean_word], 4))))
         elif clean_word != '':   
-            final_out.append( (clean_word, 0))        
+            final_out.append( (clean_word, float(0)))        
     return final_out    
+
+class CustomJSONizer(json.JSONEncoder):
+    def default(self, obj):
+        return super().encode(bool(obj)) \
+            if isinstance(obj, np.bool_) \
+            else super().default(obj) 
 
 app.run(host='localhost', port=5000, debug=True)

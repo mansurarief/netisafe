@@ -1,0 +1,16 @@
+{
+	"user_pagetitle": "Social Media",
+	"user_fullname": "24679 Student",
+	"avatar_img": "https://i.pravatar.cc/151",
+	"stories": [{
+		"id": 1,
+		"message": "story a",
+		"bg_img": "https://picsum.photos/600/301",
+		"avatar_img": "https://i.pravatar.cc/150"
+	}, {
+		"id": 2,
+		"message": "story b",
+		"bg_img": "https://picsum.photos/601/302",
+		"avatar_img": "https://i.pravatar.cc/149"
+	}]
+}
