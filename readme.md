@@ -1,3 +1,7 @@
+
+CONTENTS OF THIS FILE
+---------------------
+
 ### NetiSafe 
 Web plug-in to detoxify social networks
 
