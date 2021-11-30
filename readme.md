@@ -1,12 +1,9 @@
 
-CONTENTS OF THIS FILE
+NetiSafe - Web plug-in to detoxify social networks
 ---------------------
 
-### NetiSafe 
-Web plug-in to detoxify social networks
-
-
-### Description
+Description
+------------
 
 This is a project originated from a course project at CMU. 
 
