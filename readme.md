@@ -9,7 +9,7 @@ This is a project originated from a course project at CMU.
 
 NetiSafe is an AI powered software solution empowers users to create healthier and more inclusive environments in digital platforms. 
 
-The system will detect toxic post from the feed, and provide toxicity scoring for the six categories (toxicity, severe toxicity, obscene, threat, insult and indentity hate) for the post. High scoring in certain categpries will be highlighted. A break down will also be provided on a word to word basis. If the post is deemed to be highly toxic, it will be filtered unless the user require to see it. The plug-in can be turn on or off at any time by the user. 
+Once turned on, the software will read all posts on the page, and process them with the ML algorithm. The system will detect toxic post from the feed, and provide toxicity scoring for the six categories (toxicity, severe toxicity, obscene, threat, insult and indentity hate) for the post. High scoring in certain categpries will be highlighted. A break down will also be provided on a word to word basis. If the post is deemed to be highly toxic, it will be filtered unless the user require to see it. The plug-in can be turn on or off at any time by the user. 
 
 
 ### Open Testing
