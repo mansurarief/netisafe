@@ -10,7 +10,8 @@ from lime.lime_text import LimeTextExplainer
 import torch.nn.functional as F
 
 app = Flask(__name__)
-model = Detoxify('original', device='cpu')
+# model = Detoxify('original', device='cpu')
+model = Detoxify('multilingual', device='cpu')
 
 #explainer
 toxic_model = model.model
