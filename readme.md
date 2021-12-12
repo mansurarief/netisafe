@@ -2,7 +2,7 @@
 
 1. Clone the repo
    ```sh
-   git clone git@github.com:mansurarief/safesocial.git
+   git clone git@github.com:mansurarief/netisafe.git
    ```
 
 2. Go into the repo
@@ -27,7 +27,7 @@
 
 4. Run the webserver
    ```sh
-   python webserver.py
+   python server-0.py
    ```
 5. Visit the rendered page at: [http://localhost:5000/](http://localhost:5000/)
 
