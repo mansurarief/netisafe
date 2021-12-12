@@ -7,7 +7,7 @@
 
 2. Go into the repo
    ```sh
-   cd safesocial
+   cd netisafe
    ```
 
 3. Create new virtual environment (if you so prefer)
