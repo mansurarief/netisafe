@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Netisafe Demo</title>
+    <title>Netisafe Demo using Facebook Sample Feed</title>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/post.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="{{ url_for('static',filename='js/posts.js') }}"></script>
@@ -13,6 +13,8 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
     <script src="{{ url_for('static',filename='temps/post_content.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
 
 
@@ -64,7 +66,7 @@
         <span class="material-icons"> forum </span>
         <span class="material-icons"> notifications_active </span>
         <span class="material-icons"> expand_more </span>
-        <button class="netisafe_button" onclick="toggleNetisafe()">
+        <button class="netisafe_button"  onclick="toggleNetisafe()">
           <div class="tooltip" >                  
           <span style="font-size:small;">NETISAFE PLUGIN ON/OFF </span>
           <span style="color:dodgerblue; font-size:small; margin:0px;" class="material-icons">info</span>
@@ -206,8 +208,22 @@
       <!-- feed ends -->
     </div>
     <!-- main body ends -->
-    <div id="fb-root"></div>    
+    <div id="fb-root"></div> 
+    <!-- modal-->
+    <div id="popUpmodal" class="modal hide">
+      <h2 id="header-popupModal">Welcome to Netisafe demo page!</h2>
+      <p>This is Netisafe, a course project prototype offering a solution to empower social media users to create a healthier digital platforms by filtering toxic contents on their social media feed. The underlying machinery is <a href="https://github.com/unitaryai/detoxify">the unitary NLP model</a> that predicts toxic categories of the text posted and apply filtering scheme based on the model prediction. The Facebook-look is intended only to demonstrate how Netisafe works filtering toxic contents and provides explanations to the users. For more information, visit <a href="https://github.com/mansurarief/safesocial">Netisafe github page</a>.</p>
+    </div>  
+    <div id="notif-toggle" class="modal hide">
+      <h2 id="header-popupModal">Netisafe is on</h2>
+    </div>  
+
   </body>
+  <script type="text/javascript">
+    $(window).on('load', function() {
+        $('#popUpmodal').modal('show');
+    });
+</script>
   <script>
     var list_post = {{post_data | safe}};
     list_post.forEach(element => get_post(element));
